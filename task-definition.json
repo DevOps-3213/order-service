@@ -1,0 +1,28 @@
+{
+    "family": "order-service",
+    "networkMode": "awsvpc",
+    "memory": "256",
+    "cpu": "512",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "executionRoleArn": "arn:aws:iam::678989291368:role/LabRole",
+    "containerDefinitions": [
+        {
+            "name": "order-service",
+            "image": "dockerobligatorio/order-service:15",
+            "cpu": 256,
+            "memory": 512,
+            "essential": true,
+            "entryPoint": [
+                "/"
+            ],
+            "portMappings": [
+                {
+                    "containerPort": 3000,
+                    "hostPort": 3000
+                }
+            ]
+        }
+    ]
+}

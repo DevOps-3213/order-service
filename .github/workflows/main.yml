@@ -1,0 +1,90 @@
+# This workflow will build a Java project with Maven, and cache/restore any dependencies to improve the workflow execution time
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-java-with-maven
+
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+
+name: Production Workflow
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+    inputs:
+      failJob:
+        description: Fail the job?
+        type: boolean
+        required: true
+        default: false
+
+env:
+  AWS_REGION: us-east-1 # set this to your preferred AWS region, e.g. us-west-1
+  ECS_SERVICE: order-service # set this to your Amazon ECS service name
+  ECS_CLUSTER: service-cluster # set this to your Amazon ECS cluster name
+  ECS_TASK_DEFINITION: MY_ECS_TASK_DEFINITION # set this to the path to your Amazon ECS task definition
+    # file, e.g. .aws/task-definition.json
+  CONTAINER_NAME: order-service # set this to the name of the container in the
+
+jobs:
+  # build:
+  #   runs-on: ubuntu-22.04
+  #   steps:
+  #     - uses: actions/checkout@v3
+  #     - name: Login to docker hub
+  #       env:
+  #         DOCKER_USER: ${{secrets.DOCKER_USER}}
+  #         DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+  #       run: |
+  #         docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+  #     - name: Build docker image
+  #       run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/${{github.event.repository.name}}:latest
+  #     - name: Push docker container
+  #       run: docker push ${{secrets.DOCKER_USER}}/${{github.event.repository.name}}:latest
+
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Login to docker hub
+        env:
+          DOCKER_USER: ${{secrets.DOCKER_USER}}
+          DOCKER_PASSWORD: ${{secrets.DOCKER_PASSWORD}}
+        run: |
+          docker login -u $DOCKER_USER -p $DOCKER_PASSWORD
+
+      - name: Build docker image
+        run: docker build . --file Dockerfile --tag ${{secrets.DOCKER_USER}}/${{github.event.repository.name}}:latest
+
+      - name: Push docker container
+        run: docker push ${{secrets.DOCKER_USER}}/${{github.event.repository.name}}:latest
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Fill in the new image ID in the Amazon ECS task definition
+        id: task-def
+        uses: aws-actions/amazon-ecs-render-task-definition@v1
+        with:
+          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          container-name: ${{ env.CONTAINER_NAME }}
+          image: ${{secrets.DOCKER_USER}}/${{github.event.repository.name}}:latest
+
+      - name: Deploy Amazon ECS task definition
+        uses: aws-actions/amazon-ecs-deploy-task-definition@v1
+        with:
+          task-definition: ${{ steps.task-def.outputs.task-definition }}
+          service: ${{ env.ECS_SERVICE }}
+          cluster: ${{ env.ECS_CLUSTER }}
+          wait-for-service-stability: true
