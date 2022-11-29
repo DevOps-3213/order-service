@@ -22,7 +22,16 @@
                     "containerPort": 3000,
                     "hostPort": 3000
                 }
-            ]
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "service-container",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-create-group": "true",
+                    "awslogs-stream-prefix": "ecs-log"
+                }
+            }
         }
     ]
 }
