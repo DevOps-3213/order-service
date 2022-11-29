@@ -1,8 +1,8 @@
 {
     "family": "order-service",
     "networkMode": "awsvpc",
-    "memory": "256",
-    "cpu": "512",
+    "memory": "512",
+    "cpu": "256",
     "requiresCompatibilities": [
         "FARGATE"
     ],
