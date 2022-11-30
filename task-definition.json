@@ -6,7 +6,7 @@
     "requiresCompatibilities": [
         "FARGATE"
     ],
-    "executionRoleArn": "arn:aws:iam::678989291368:role/LabRole",
+    "executionRoleArn": "arn:aws:iam::406344907068:role/aws-service-role/ecs.amazonaws.com/AWSServiceRoleForECS",
     "containerDefinitions": [
         {
             "name": "order-service",
