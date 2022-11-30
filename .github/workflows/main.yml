@@ -63,8 +63,8 @@ jobs:
           username: ${{ secrets.DOCKER_USER }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Generate .jar
-        run: mvn install
+      - name: Maven build
+        run: mvn -B clean package --file pom.xml
 
       - name: Build and push
         uses: docker/build-push-action@v3
