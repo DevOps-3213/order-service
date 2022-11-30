@@ -10,7 +10,7 @@
     "containerDefinitions": [
         {
             "name": "order-service",
-            "image": "nginx:latest",
+            "image": "tutum/hello-world",
             "cpu": 256,
             "memory": 512,
             "essential": true,
