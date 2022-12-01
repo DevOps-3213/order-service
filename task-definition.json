@@ -1,4 +1,39 @@
 {
     "family": "order-service",
-    "image": "latest"
+    "networkMode": "awsvpc",
+    "memory": "512",
+    "cpu": "256",
+    "requiresCompatibilities": [
+        "FARGATE"
+    ],
+    "executionRoleArn": "arn:aws:iam::678989291368:role/LabRole",
+    "containerDefinitions": [
+        {
+            "name": "order-service",
+            "image": "dockerobligatorio/order-service:latest",
+            "cpu": 256,
+            "memory": 512,
+            "essential": true,
+            "portMappings": [
+                {
+                    "containerPort": 8080
+                }
+            ],
+            "environment": [
+                {
+                    "name": "APP_ARGS",
+                    "value": "http://172.17.0.2:8081 http://172.17.0.2:8081 http://172.17.0.2:8081"
+                }
+            ],
+            "logConfiguration": {
+                "logDriver": "awslogs",
+                "options": {
+                    "awslogs-group": "service-container",
+                    "awslogs-region": "us-east-1",
+                    "awslogs-create-group": "true",
+                    "awslogs-stream-prefix": "ecs-log"
+                }
+            }
+        }
+    ]
 }
