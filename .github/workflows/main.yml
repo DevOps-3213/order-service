@@ -85,7 +85,7 @@ jobs:
           aws-region: ${{ env.AWS_REGION }}
 
       - name: debug
-        run: echo ${{ env.CONTAINER_NAME }}
+        run: echo ${{ GITHUB_REF_NAME }}
 
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
