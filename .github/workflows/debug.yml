@@ -1,0 +1,32 @@
+name: Workflow for testing
+
+on:
+  push:
+    branches: ["main"]
+  pull_request:
+    branches: ["main"]
+  workflow_dispatch:
+    inputs:
+      failJob:
+        description: Fail the job?
+        type: boolean
+        required: true
+        default: false
+
+jobs:
+  deploy:
+    name: Deploy
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Load env variables
+        uses: cardinalby/export-env-action@v1
+        with:
+          envFile: "variables.env"
+          expand: "true"
+
+      - name: debug
+        run: echo ${{ env.CONTAINER_NAME }}
