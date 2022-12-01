@@ -10,7 +10,7 @@
     "containerDefinitions": [
         {
             "name": "order-service",
-            "image": "dockerobligatorio/order-service:latest",
+            "image": "dockerobligatorio/order-service-$GITHUB_REF_NAME:latest",
             "cpu": 256,
             "memory": 512,
             "essential": true,
