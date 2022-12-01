@@ -2,9 +2,6 @@ name: Workflow for testing
 
 on:
   push:
-    branches: ["main"]
-  pull_request:
-    branches: ["main"]
   workflow_dispatch:
     inputs:
       failJob:
@@ -29,4 +26,4 @@ jobs:
           expand: "true"
 
       - name: debug
-        run: echo ${{ env.CONTAINER_NAME }}
+        run: echo ${{ env.GITHUB_REF_NAME }}
