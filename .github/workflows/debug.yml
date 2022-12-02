@@ -22,7 +22,7 @@ jobs:
       - name: Create tmp json file
         run: |
           tmp=$(mktemp)
-          jq '.containerDefinitions.image = "abcde"' task-definition.json > "$tmp" && mv "$tmp" test.json
+          jq '.containerDefinitions[0].image = "abcde"' task-definition.json > "$tmp" && mv "$tmp" test.json
           echo test.json
 
       - name: Load env variables
