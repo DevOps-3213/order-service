@@ -35,8 +35,8 @@ jobs:
         run: |
           tmp=$(mktemp)
           image=${{ env.IMAGE }}
-          jq --arg a "$image" '.containerDefinitions[0].image = $a' task-definition.json > "$tmp" && mv "$tmp" test.json
-          cat test.json
+          jq --arg a "$image" '.containerDefinitions[0].image = $a' ${{ env.ECS_TASK_DEFINITION }} > "$tmp" && mv "$tmp" tmp.json
+          cat tmp.json
 
       # - name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v2
@@ -64,21 +64,18 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: debug
-        run: echo ${{ env.ECS_TASK_DEFINITION }}
-
       - name: Fill in the new image ID in the Amazon ECS task definition
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          task-definition: ./tmp.json
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ env.IMAGE }}
 
       - name: Deploy Amazon ECS task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
-          task-definition: ${{ env.ECS_TASK_DEFINITION }}
+          task-definition: ./tmp.json
           service: ${{ env.ECS_SERVICE }}
           cluster: ${{ env.ECS_CLUSTER }}
       #     wait-for-service-stability: true
