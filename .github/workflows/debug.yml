@@ -23,7 +23,7 @@ jobs:
         run: |
           tmp=$(mktemp)
           jq '.containerDefinitions[0].image = "abcde"' task-definition.json > "$tmp" && mv "$tmp" test.json
-          ls
+          cat test.json
 
       - name: Load env variables
         uses: cardinalby/export-env-action@v1
