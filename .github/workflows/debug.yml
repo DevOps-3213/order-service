@@ -19,6 +19,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
+      - name: Create tmp json file
+        run: |
+          tmp=$(mktemp)
+          jq '.containerDefinitions.image = "abcde"' test.json > "$tmp" && mv "$tmp" test.json
+          echo test.json
+
       - name: Load env variables
         uses: cardinalby/export-env-action@v1
         with:
