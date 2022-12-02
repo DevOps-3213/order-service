@@ -22,7 +22,7 @@ jobs:
       - name: Create tmp json file
         run: |
           tmp=$(mktemp)
-          image=${{ env.GITHUB_REF_NAME }}
+          image=
           jq --arg a "$image" '.containerDefinitions[0].image = $a' task-definition.json > "$tmp" && mv "$tmp" test.json
           cat test.json
 
