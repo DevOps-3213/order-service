@@ -35,7 +35,7 @@ jobs:
         run: |
           tmp=$(mktemp)
           image=${{ env.IMAGE }}
-          jq '.containerDefinitions[0].image = "${image}"' task-definition.json > "$tmp" && mv "$tmp" test.json
+          jq --arg a "$image" '.containerDefinitions[0].image = $a' task-definition.json > "$tmp" && mv "$tmp" test.json
           cat test.json
 
       # - name: Set up Docker Buildx
