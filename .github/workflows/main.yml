@@ -17,6 +17,7 @@ env:
   IMAGE: ${{ secrets.DOCKER_USER }}/${{ github.event.repository.name }}-$GITHUB_REF_NAME:latest # Image to push
 
 jobs:
+  #Se genera analisis en Sonarcloud
   build:
     name: Analisis Sonar
     runs-on: ubuntu-latest
@@ -54,14 +55,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-
-      - name: Load env variables
+      
+      - name: Load env variables # Se cargan variables de entorno del archivo de variables
         uses: cardinalby/export-env-action@v1
         with:
           envFile: "variables.env"
           expand: "true"
 
-      - name: Create tmp json file with branch name
+      - name: Create tmp json file with branch name # Se crea un archivo temporal para que la imagen corresponda con la rama
         run: |
           tmp=$(mktemp)
           image=${{ env.IMAGE }}
@@ -71,7 +72,7 @@ jobs:
       # - name: Set up Docker Buildx
       #   uses: docker/setup-buildx-action@v2
 
-      - name: Login to Docker Hub
+      - name: Login to Docker Hub # Login de docker
         uses: docker/login-action@v2
         with:
           username: ${{ secrets.DOCKER_USER }}
@@ -94,7 +95,7 @@ jobs:
           aws-session-token: ${{ secrets.AWS_SESSION_TOKEN }}
           aws-region: ${{ env.AWS_REGION }}
 
-      - name: Fill in the new image ID in the Amazon ECS task definition
+      - name: Fill in the new image ID in the Amazon ECS task definition # Actualización de task definition de AWS
         id: task-def
         uses: aws-actions/amazon-ecs-render-task-definition@v1
         with:
@@ -102,7 +103,7 @@ jobs:
           container-name: ${{ env.CONTAINER_NAME }}
           image: ${{ env.IMAGE }}
 
-      - name: Deploy Amazon ECS task definition
+      - name: Deploy Amazon ECS task definition # Deploy del task definition
         uses: aws-actions/amazon-ecs-deploy-task-definition@v1
         with:
           task-definition: ./tmp.json
