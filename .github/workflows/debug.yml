@@ -23,7 +23,7 @@ jobs:
         run: |
           tmp=$(mktemp)
           image=${{ env.GITHUB_REF_NAME }}
-          jq '.containerDefinitions[0].image = $image' task-definition.json > "$tmp" && mv "$tmp" test.json
+          jq --arg a "$image" '.containerDefinitions[0].image = $a' task-definition.json > "$tmp" && mv "$tmp" test.json
           cat test.json
 
       - name: Load env variables
