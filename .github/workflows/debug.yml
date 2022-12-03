@@ -33,4 +33,4 @@ jobs:
           expand: "true"
 
       - name: debug
-        run: echo ${{ env.GITHUB_REF_NAME }}
+        run: echo $( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )
