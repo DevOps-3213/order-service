@@ -33,4 +33,4 @@ jobs:
           expand: "true"
 
       - name: debug
-        run: echo $( mvn help:evaluate -Dexpression=project.version -q -DforceStdout )
+        run: echo $( mvn help:evaluate -Dexpression=project.name -q -DforceStdout )
