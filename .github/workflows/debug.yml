@@ -35,4 +35,4 @@ jobs:
           expand: "true"
 
       - name: debug
-        run: echo ${{ env.IMAGE }}
+        run: echo ${{ env.JAR_FILE }}
