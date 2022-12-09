@@ -9,6 +9,8 @@ on:
         type: boolean
         required: true
         default: false
+env:
+  JAR_FILE: ./target/$( mvn help:evaluate -Dexpression=project.name -q -DforceStdout )-$( mvn help:evaluate -Dexpression=project.version -q -DforceStdout ).jar
 
 jobs:
   deploy:
@@ -33,4 +35,4 @@ jobs:
           expand: "true"
 
       - name: debug
-        run: echo $( mvn help:evaluate -Dexpression=project.name -q -DforceStdout )
+        run: echo ${{ env.IMAGE }}
