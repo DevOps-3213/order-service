@@ -14,7 +14,6 @@
             "cpu": 256,
             "memory": 512,
             "essential": true,
-            "network_mode": "awsvpc",
             "portMappings": [
                 {
                     "containerPort": 8080
@@ -23,7 +22,7 @@
       "environment" : [
         {
           "name" : "APP_ARGS",
-          "value" : "http://localhost:8080 http://localhost:8080 http://localhost:8080"
+          "value" : "http://localhost:81 http://localhost:83 http://localhost:82"
         }
       ],
             "logConfiguration": {
