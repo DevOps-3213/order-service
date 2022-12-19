@@ -22,7 +22,7 @@
       "environment" : [
         {
           "name" : "APP_ARGS",
-          "value" : "http://localhost:81 http://localhost:83 http://localhost:82"
+          "value" : "http://main-alb-984047141.us-east-1.elb.amazonaws.com:81 http://main-alb-984047141.us-east-1.elb.amazonaws.com:83 http://main-alb-984047141.us-east-1.elb.amazonaws.com:82"
         }
       ],
             "logConfiguration": {
